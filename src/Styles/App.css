@@ -164,3 +164,67 @@ body {
 .shadow-lg {
   box-shadow: var(--shadow-lg);
 }
+
+/* Layout Styles */
+.main-content {
+  padding: 1rem 0;
+}
+
+.app-layout {
+  display: grid;
+  grid-template-columns: 350px 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  position: sticky;
+  top: 1rem;
+}
+
+.calendar-main {
+  min-height: 80vh;
+}
+
+/* Smart Watch Layout */
+@media (max-width: 240px) {
+  .main-content {
+    padding: 0.5rem 0;
+  }
+
+  .app-layout {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .sidebar {
+    position: static;
+    gap: 1rem;
+  }
+}
+
+/* Mobile Layout */
+@media (max-width: 768px) {
+  .app-layout {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .sidebar {
+    position: static;
+  }
+
+  .calendar-main {
+    min-height: 60vh;
+  }
+}
+
+/* Large Desktop */
+@media (min-width: 1200px) {
+  .app-layout {
+    grid-template-columns: 400px 1fr;
+  }
+}
