@@ -1,0 +1,144 @@
+.calendar-view {
+  background: var(--surface-color);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  height: 100%;
+}
+
+.calendar-header {
+  background: var(--card-color);
+  border-bottom: 1px solid var(--border-color);
+  padding: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+}
+
+.calendar-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+}
+
+.today-btn {
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.today-btn:hover {
+  background: var(--secondary-color);
+  transform: translateY(-1px);
+}
+
+.navigation {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.nav-btn {
+  background: var(--background-color);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.nav-btn:hover {
+  border-color: var(--primary-color);
+  background: var(--surface-color);
+}
+
+.calendar-title {
+  margin: 0;
+  color: var(--text-color);
+  font-size: 1.5rem;
+  font-weight: 700;
+  flex: 1;
+  text-align: center;
+}
+
+.calendar-content {
+  height: calc(100% - 80px);
+  overflow: auto;
+}
+
+/* Smart Watch */
+@media (max-width: 240px) {
+  .calendar-header {
+    padding: 1rem;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .calendar-controls {
+    order: 2;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .calendar-title {
+    order: 1;
+    font-size: 1.1rem;
+    text-align: center;
+  }
+
+  .today-btn {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.8rem;
+  }
+
+  .nav-btn {
+    width: 30px;
+    height: 30px;
+    font-size: 1rem;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .calendar-header {
+    padding: 1rem;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .calendar-controls {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .calendar-title {
+    font-size: 1.3rem;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .calendar-controls {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .calendar-title {
+    order: -1;
+    flex-basis: 100%;
+  }
+}
