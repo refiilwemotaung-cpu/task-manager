@@ -5,7 +5,7 @@ import Header from "./Components/Header";
 import CalendarView from "./Components/Calendar/CalendarView";
 import TaskForm from "./Components/TaskForm";
 import TaskList from "./Components/TaskList";
-// import "./Styles/App.css";
+import "./Styles/App.css";
 
 function App() {
   return (
