@@ -4,14 +4,21 @@ import { formatDate } from "../Utils/calendarUtils";
 import "../Styles/TaskItem.css";
 
 const TaskItem = ({ task, compact = false }) => {
-  const { updateTask, deleteTask, toggleTaskCompletion, startDrag } =
-    useTasks();
+  const {
+    updateTask,
+    deleteTask,
+    toggleTaskCompletion,
+    startDrag,
+    getCategory,
+    categories, // ← Added categories here
+  } = useTasks();
   const [isEditing, setIsEditing] = useState(false);
   const [editData, setEditData] = useState({
     title: task.title,
     description: task.description,
     priority: task.priority,
     dueDate: task.dueDate,
+    category: task.category,
   });
 
   const handleSave = () => {
@@ -29,6 +36,7 @@ const TaskItem = ({ task, compact = false }) => {
       description: task.description,
       priority: task.priority,
       dueDate: task.dueDate,
+      category: task.category,
     });
     setIsEditing(false);
   };
@@ -50,10 +58,12 @@ const TaskItem = ({ task, compact = false }) => {
   };
 
   const priorityInfo = getPriorityInfo(task.priority);
+  const categoryInfo = getCategory(task.category);
   const isOverdue =
     task.dueDate && new Date(task.dueDate) < new Date() && !task.completed;
 
   if (isEditing) {
+    // ← Now we can use categories directly without calling useTasks()
     return (
       <div className="task-item-editing">
         <input
@@ -84,6 +94,20 @@ const TaskItem = ({ task, compact = false }) => {
             <option value="medium">Medium</option>
             <option value="high">High</option>
           </select>
+          <select
+            name="category"
+            value={editData.category}
+            onChange={handleChange}
+            className="edit-select"
+          >
+            {categories.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.name}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="edit-controls">
           <input
             type="date"
             name="dueDate"
@@ -104,6 +128,7 @@ const TaskItem = ({ task, compact = false }) => {
     );
   }
 
+  // ... rest of your component remains the same
   if (compact) {
     return (
       <div
@@ -122,8 +147,16 @@ const TaskItem = ({ task, compact = false }) => {
           />
           <div className="compact-content">
             <div className="compact-title">{task.title}</div>
-            <div className="compact-date">
-              {formatDate(new Date(task.dueDate), "MMM d")}
+            <div className="compact-meta">
+              <span
+                className="compact-category"
+                style={{ color: categoryInfo.color }}
+              >
+                {categoryInfo.icon}
+              </span>
+              <span className="compact-date">
+                {formatDate(new Date(task.dueDate), "MMM d")}
+              </span>
             </div>
           </div>
           <div
@@ -159,6 +192,12 @@ const TaskItem = ({ task, compact = false }) => {
             <p className="task-description">{task.description}</p>
           )}
           <div className="task-meta">
+            <span
+              className="task-category"
+              style={{ color: categoryInfo.color }}
+            >
+              {categoryInfo.icon} {categoryInfo.name}
+            </span>
             <span className="task-date">
               📅 {formatDate(new Date(task.dueDate), "MMM d, yyyy")}
             </span>

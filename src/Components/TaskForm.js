@@ -5,13 +5,14 @@ import { formatDate } from "../Utils/calendarUtils";
 import "../Styles/TaskForm.css";
 
 const TaskForm = () => {
-  const { addTask } = useTasks();
+  const { addTask, categories } = useTasks();
   const { isDarkMode } = useTheme();
   const [formData, setFormData] = useState({
     title: "",
     description: "",
     priority: "medium",
     dueDate: formatDate(new Date()),
+    category: "work",
   });
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -25,15 +26,15 @@ const TaskForm = () => {
       description: formData.description.trim(),
     });
 
-    // Reset form but keep the date
+    // Reset form but keep the date and category
     setFormData({
       title: "",
       description: "",
       priority: "medium",
-      dueDate: formData.dueDate, // Keep the same date for quick adding
+      dueDate: formData.dueDate,
+      category: formData.category,
     });
 
-    // Collapse form after submission
     setIsExpanded(false);
   };
 
@@ -44,13 +45,19 @@ const TaskForm = () => {
     });
   };
 
-  const handleQuickAdd = (title, priority = "medium") => {
+  const handleQuickAdd = (title, category = "work", priority = "medium") => {
     addTask({
       title,
       description: "",
       priority,
       dueDate: formatDate(new Date()),
+      category,
     });
+  };
+
+  const getCategoryIcon = (categoryId) => {
+    const category = categories.find((cat) => cat.id === categoryId);
+    return category ? category.icon : "📝";
   };
 
   return (
@@ -70,22 +77,24 @@ const TaskForm = () => {
         {/* Quick Add Buttons */}
         <div className="quick-add-buttons">
           <button
-            onClick={() => handleQuickAdd("Meeting", "high")}
-            className="quick-btn high"
+            onClick={() => handleQuickAdd("Team Meeting", "work", "high")}
+            className="quick-btn work"
           >
-            📅 Meeting
+            💼 Meeting
           </button>
           <button
-            onClick={() => handleQuickAdd("Workout", "medium")}
-            className="quick-btn medium"
+            onClick={() => handleQuickAdd("Workout", "health", "medium")}
+            className="quick-btn health"
           >
             💪 Workout
           </button>
           <button
-            onClick={() => handleQuickAdd("Read", "low")}
-            className="quick-btn low"
+            onClick={() =>
+              handleQuickAdd("Study Session", "learning", "medium")
+            }
+            className="quick-btn learning"
           >
-            📚 Read
+            📚 Study
           </button>
         </div>
 
@@ -136,16 +145,33 @@ const TaskForm = () => {
               </div>
 
               <div className="form-group">
-                <label htmlFor="dueDate">Due Date</label>
-                <input
-                  type="date"
-                  id="dueDate"
-                  name="dueDate"
-                  value={formData.dueDate}
+                <label htmlFor="category">Category</label>
+                <select
+                  id="category"
+                  name="category"
+                  value={formData.category}
                   onChange={handleChange}
-                  className="form-input"
-                />
+                  className="form-select"
+                >
+                  {categories.map((category) => (
+                    <option key={category.id} value={category.id}>
+                      {category.icon} {category.name}
+                    </option>
+                  ))}
+                </select>
               </div>
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="dueDate">Due Date</label>
+              <input
+                type="date"
+                id="dueDate"
+                name="dueDate"
+                value={formData.dueDate}
+                onChange={handleChange}
+                className="form-input"
+              />
             </div>
 
             <div className="form-actions">
