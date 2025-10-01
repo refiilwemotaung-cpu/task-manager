@@ -1,10 +1,8 @@
 .pomodoro-minimized {
   position: fixed;
-  bottom: 20px;
-  right: 20px;
   background: var(--primary-color);
   color: white;
-  border-radius: 50px;
+  border-radius: 25px;
   padding: 0.75rem 1rem;
   display: flex;
   align-items: center;
@@ -13,17 +11,21 @@
   box-shadow: var(--shadow-lg);
   z-index: 1000;
   transition: all 0.3s ease;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  min-width: 140px;
 }
 
 .pomodoro-minimized:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(37, 99, 235, 0.3);
+  box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4);
+  border-color: rgba(255, 255, 255, 0.4);
 }
 
 .mini-timer {
   display: flex;
   flex-direction: column;
   align-items: center;
+  flex: 1;
 }
 
 .mini-time {
@@ -35,46 +37,59 @@
 .mini-session {
   font-size: 0.7rem;
   opacity: 0.9;
+  margin-top: 0.25rem;
 }
 
-.expand-btn {
+.mini-controls {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.mini-btn {
   background: rgba(255, 255, 255, 0.2);
   border: none;
   color: white;
   border-radius: 50%;
-  width: 30px;
-  height: 30px;
+  width: 28px;
+  height: 28px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  font-size: 0.9rem;
+  font-size: 0.7rem;
+  transition: all 0.3s ease;
+}
+
+.mini-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
 }
 
 .pomodoro-timer {
   position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   background: var(--card-color);
   border-radius: 20px;
-  padding: 2rem;
+  padding: 1.5rem;
   box-shadow: var(--shadow-lg);
   z-index: 1001;
-  width: 90%;
-  max-width: 400px;
+  width: 350px;
   border-left: 6px solid;
   animation: slideUp 0.3s ease;
+  user-select: none;
+}
+
+.pomodoro-timer:not(.pomodoro-minimized) {
+  cursor: move;
 }
 
 @keyframes slideUp {
   from {
     opacity: 0;
-    transform: translate(-50%, -40%);
+    transform: translateY(20px);
   }
   to {
     opacity: 1;
-    transform: translate(-50%, -50%);
+    transform: translateY(0);
   }
 }
 
@@ -91,24 +106,36 @@
   font-size: 1.3rem;
 }
 
-.close-btn {
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  color: var(--text-secondary);
-  cursor: pointer;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
+.header-controls {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.control-btn {
+  background: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  width: 28px;
+  height: 28px;
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: bold;
   transition: all 0.3s ease;
 }
 
+.minimize-btn:hover {
+  background: var(--warning-color);
+  color: white;
+  border-color: var(--warning-color);
+}
+
 .close-btn:hover {
-  background: var(--surface-color);
-  color: var(--text-color);
+  background: var(--error-color);
+  color: white;
+  border-color: var(--error-color);
 }
 
 .timer-display {
@@ -158,13 +185,13 @@
   margin-bottom: 2rem;
 }
 
-.control-btn {
+.timer-controls .control-btn {
+  width: auto;
+  height: auto;
   padding: 0.75rem 1.5rem;
   border: none;
   border-radius: 25px;
   font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
   font-size: 0.9rem;
 }
 
@@ -191,7 +218,6 @@
 .reset-btn {
   background: var(--surface-color);
   color: var(--text-color);
-  border: 1px solid var(--border-color);
 }
 
 .reset-btn:hover {
@@ -258,12 +284,28 @@
   letter-spacing: 0.5px;
 }
 
+.drag-handle {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  cursor: move;
+  opacity: 0.5;
+  transition: opacity 0.3s ease;
+}
+
+.drag-handle:hover {
+  opacity: 1;
+}
+
 /* Smart Watch */
 @media (max-width: 240px) {
   .pomodoro-minimized {
-    bottom: 10px;
-    right: 10px;
     padding: 0.5rem 0.75rem;
+    min-width: 120px;
+    border-radius: 20px;
   }
 
   .mini-time {
@@ -274,15 +316,19 @@
     font-size: 0.6rem;
   }
 
-  .expand-btn {
-    width: 25px;
-    height: 25px;
-    font-size: 0.8rem;
+  .mini-btn {
+    width: 24px;
+    height: 24px;
+    font-size: 0.6rem;
   }
 
   .pomodoro-timer {
+    width: 280px;
     padding: 1rem;
-    width: 95%;
+    left: 10px !important;
+    top: 10px !important;
+    right: 10px;
+    bottom: 10px;
   }
 
   .pomodoro-header h3 {
@@ -303,7 +349,7 @@
     gap: 0.5rem;
   }
 
-  .control-btn {
+  .timer-controls .control-btn {
     padding: 0.6rem 1rem;
     font-size: 0.8rem;
   }
@@ -320,7 +366,9 @@
 /* Mobile */
 @media (max-width: 768px) {
   .pomodoro-timer {
-    width: 95%;
-    max-width: 350px;
+    width: 320px;
+    left: 50% !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%);
   }
 }
