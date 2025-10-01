@@ -20,10 +20,14 @@ export const ThemeProvider = ({ children }) => {
     }
   }, []);
 
+  useEffect(() => {
+    const theme = isDarkMode ? "dark" : "light";
+    localStorage.setItem("calendar-theme", theme);
+    document.documentElement.setAttribute("data-theme", theme);
+  }, [isDarkMode]);
+
   const toggleTheme = () => {
-    const newTheme = !isDarkMode;
-    setIsDarkMode(newTheme);
-    localStorage.setItem("calendar-theme", newTheme ? "dark" : "light");
+    setIsDarkMode(!isDarkMode);
   };
 
   const value = {
