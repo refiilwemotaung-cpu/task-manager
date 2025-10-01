@@ -18,9 +18,9 @@ export const PomodoroProvider = ({ children }) => {
   const [totalFocusTime, setTotalFocusTime] = useState(0);
 
   const settings = {
-    work: 25 * 60, // 25 minutes
-    shortBreak: 5 * 60, // 5 minutes
-    longBreak: 15 * 60, // 15 minutes
+    work: 25 * 60,
+    shortBreak: 5 * 60,
+    longBreak: 15 * 60,
   };
 
   useEffect(() => {
@@ -44,7 +44,6 @@ export const PomodoroProvider = ({ children }) => {
   }, [isRunning, timeLeft]);
 
   const handleTimerComplete = () => {
-    // Play notification sound (browser beep)
     if (window.Notification && Notification.permission === "granted") {
       new Notification("Pomodoro Timer", {
         body: `${
@@ -60,7 +59,6 @@ export const PomodoroProvider = ({ children }) => {
       setSessionsCompleted((prev) => prev + 1);
       setTotalFocusTime((prev) => prev + settings.work);
 
-      // Every 4 sessions, take a long break
       if ((sessionsCompleted + 1) % 4 === 0) {
         setSessionType("longBreak");
         setTimeLeft(settings.longBreak);

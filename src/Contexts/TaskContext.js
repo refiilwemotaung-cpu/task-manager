@@ -3,7 +3,6 @@ import { formatDate, getTodayTasks } from "../Utils/calendarUtils";
 
 const TaskContext = createContext();
 
-// Default categories with colors and icons
 const defaultCategories = [
   { id: "work", name: "Work", color: "#3B82F6", icon: "💼" },
   { id: "personal", name: "Personal", color: "#10B981", icon: "🏠" },
@@ -117,12 +116,10 @@ export const TaskProvider = ({ children }) => {
   };
 
   const deleteCategory = (id) => {
-    // Don't allow deleting default categories
     if (defaultCategories.find((cat) => cat.id === id)) {
       return false;
     }
 
-    // Move tasks from deleted category to 'other'
     setTasks((prevTasks) =>
       prevTasks.map((task) =>
         task.category === id ? { ...task, category: "other" } : task

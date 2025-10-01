@@ -26,7 +26,6 @@ const TaskForm = () => {
       description: formData.description.trim(),
     });
 
-    // Reset form but keep the date and category
     setFormData({
       title: "",
       description: "",

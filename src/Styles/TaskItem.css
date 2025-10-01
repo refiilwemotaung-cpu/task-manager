@@ -294,6 +294,52 @@
   background: var(--border-color);
 }
 
+/* Add to existing TaskItem.css */
+
+.reminder-btn {
+  background: none;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 0.5rem;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: all 0.3s ease;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.reminder-btn:hover {
+  border-color: var(--warning-color);
+  background: rgba(245, 158, 11, 0.1);
+}
+
+.reminders-badge {
+  background: rgba(245, 158, 11, 0.1);
+  color: var(--warning-color);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  margin-top: 0.5rem;
+  display: inline-block;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.compact-reminder {
+  font-size: 0.7rem;
+  color: var(--warning-color);
+}
+
+/* Update task actions for additional button */
+.task-actions {
+  display: flex;
+  gap: 0.25rem;
+  flex-shrink: 0;
+}
+
 /* Smart Watch */
 @media (max-width: 240px) {
   .task-item {

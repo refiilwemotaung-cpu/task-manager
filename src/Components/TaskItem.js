@@ -10,8 +10,9 @@ const TaskItem = ({ task, compact = false }) => {
     toggleTaskCompletion,
     startDrag,
     getCategory,
-    categories, // ← Added categories here
+    categories,
   } = useTasks();
+
   const [isEditing, setIsEditing] = useState(false);
   const [editData, setEditData] = useState({
     title: task.title,
@@ -63,7 +64,6 @@ const TaskItem = ({ task, compact = false }) => {
     task.dueDate && new Date(task.dueDate) < new Date() && !task.completed;
 
   if (isEditing) {
-    // ← Now we can use categories directly without calling useTasks()
     return (
       <div className="task-item-editing">
         <input
@@ -100,11 +100,12 @@ const TaskItem = ({ task, compact = false }) => {
             onChange={handleChange}
             className="edit-select"
           >
-            {categories.map((category) => (
-              <option key={category.id} value={category.id}>
-                {category.name}
-              </option>
-            ))}
+            {categories &&
+              categories.map((category) => (
+                <option key={category.id} value={category.id}>
+                  {category.name}
+                </option>
+              ))}
           </select>
         </div>
         <div className="edit-controls">
@@ -128,7 +129,6 @@ const TaskItem = ({ task, compact = false }) => {
     );
   }
 
-  // ... rest of your component remains the same
   if (compact) {
     return (
       <div
