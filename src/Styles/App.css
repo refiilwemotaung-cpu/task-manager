@@ -63,6 +63,31 @@ body {
   padding: 0 1rem;
 }
 
+/* Update layout for new components */
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  position: sticky;
+  top: 1rem;
+}
+
+/* Smart Watch Layout */
+@media (max-width: 240px) {
+  .sidebar {
+    gap: 1rem;
+    position: static;
+  }
+}
+
+/* Mobile Layout */
+@media (max-width: 768px) {
+  .sidebar {
+    position: static;
+    gap: 1.5rem;
+  }
+}
+
 /* Smart Watch Responsive */
 @media (max-width: 240px) {
   body {

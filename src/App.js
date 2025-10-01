@@ -1,10 +1,14 @@
 import React from "react";
 import { ThemeProvider, useTheme } from "./Contexts/ThemeContext";
 import { TaskProvider } from "./Contexts/TaskContext";
+import { PomodoroProvider } from "./Contexts/PomodoroContext";
+import { ReminderProvider } from "./Contexts/ReminderContext";
 import Header from "./Components/Header";
 import CalendarView from "./Components/Calendar/CalendarView";
 import TaskForm from "./Components/TaskForm";
 import TaskList from "./Components/TaskList";
+import PomodoroTimer from "./Components/PomodoroTimer";
+import RemindersPanel from "./Components/RemindersPanel";
 import "./Styles/App.css";
 
 function AppContent() {
@@ -16,8 +20,10 @@ function AppContent() {
       <main className="main-content">
         <div className="container">
           <div className="app-layout">
-            {/* Left Sidebar - Task Form & Today's Tasks */}
+            {/* Left Sidebar - All Features */}
             <div className="sidebar">
+              <PomodoroTimer />
+              <RemindersPanel />
               <TaskForm />
               <TaskList />
             </div>
@@ -37,7 +43,11 @@ function App() {
   return (
     <ThemeProvider>
       <TaskProvider>
-        <AppContent />
+        <PomodoroProvider>
+          <ReminderProvider>
+            <AppContent />
+          </ReminderProvider>
+        </PomodoroProvider>
       </TaskProvider>
     </ThemeProvider>
   );
