@@ -72,22 +72,6 @@ body {
   top: 1rem;
 }
 
-/* Smart Watch Layout */
-@media (max-width: 240px) {
-  .sidebar {
-    gap: 1rem;
-    position: static;
-  }
-}
-
-/* Mobile Layout */
-@media (max-width: 768px) {
-  .sidebar {
-    position: static;
-    gap: 1.5rem;
-  }
-}
-
 /* Smart Watch Responsive */
 @media (max-width: 240px) {
   body {
@@ -99,6 +83,11 @@ body {
     padding: 0 2px;
     max-width: 100%;
   }
+
+  .sidebar {
+    gap: 1rem;
+    position: static;
+  }
 }
 
 /* Mobile Responsive */
@@ -109,6 +98,11 @@ body {
 
   .container {
     padding: 0 0.5rem;
+  }
+
+  .sidebar {
+    position: static;
+    gap: 1.5rem;
   }
 }
 
