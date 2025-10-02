@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { ThemeProvider, useTheme } from "./Contexts/ThemeContext";
 import { TaskProvider } from "./Contexts/TaskContext";
 import { PomodoroProvider } from "./Contexts/PomodoroContext";
@@ -13,6 +13,8 @@ import "./Styles/App.css";
 
 function AppContent() {
   const { theme } = useTheme();
+  const [currentView, setCurrentView] = useState("month");
+  const isDayView = currentView === "day";
 
   return (
     <div className="app" data-theme={theme}>
@@ -24,13 +26,17 @@ function AppContent() {
             <div className="sidebar">
               <PomodoroTimer />
               <RemindersPanel />
-              <TaskForm />
+              {/* Only show TaskForm when NOT in Day view (since Day view has inline adding) */}
+              {!isDayView && <TaskForm />}
               <TaskList />
             </div>
 
             {/* Main Calendar Area */}
             <div className="calendar-main">
-              <CalendarView />
+              <CalendarView
+                currentView={currentView}
+                onViewChange={setCurrentView}
+              />
             </div>
           </div>
         </div>

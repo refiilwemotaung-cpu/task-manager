@@ -45,6 +45,7 @@ export const TaskProvider = ({ children }) => {
     localStorage.setItem("calendar-categories", JSON.stringify(categories));
   }, [categories]);
 
+  // In the addTask function, update to include scheduledHour
   const addTask = (task) => {
     const newTask = {
       id: Date.now().toString(),
@@ -53,6 +54,7 @@ export const TaskProvider = ({ children }) => {
       completed: false,
       dueDate: task.dueDate || formatDate(new Date()),
       category: task.category || "other",
+      scheduledHour: task.scheduledHour || null, // Add scheduled hour
     };
     setTasks((prevTasks) => [...prevTasks, newTask]);
     return newTask;

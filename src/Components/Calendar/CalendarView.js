@@ -7,10 +7,9 @@ import ViewToggle from "../ViewToggle";
 import { navigateDate, formatDate } from "../../Utils/calendarUtils";
 import "../../Styles/CalendarView.css";
 
-const CalendarView = () => {
+const CalendarView = ({ currentView, onViewChange }) => {
   const { isDarkMode } = useTheme();
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [currentView, setCurrentView] = useState("month");
 
   const handlePrevious = () => {
     setCurrentDate(navigateDate(currentDate, "prev", currentView));
@@ -22,6 +21,10 @@ const CalendarView = () => {
 
   const handleToday = () => {
     setCurrentDate(new Date());
+  };
+
+  const handleViewChange = (view) => {
+    onViewChange(view);
   };
 
   const getHeaderText = () => {
@@ -96,7 +99,7 @@ const CalendarView = () => {
           <h2 className="calendar-title">{getHeaderText()}</h2>
         </div>
 
-        <ViewToggle currentView={currentView} onViewChange={setCurrentView} />
+        <ViewToggle currentView={currentView} onViewChange={handleViewChange} />
       </div>
 
       <div className="calendar-content">{renderCalendar()}</div>
