@@ -1,127 +1,308 @@
-import React from "react";
+import React, { useState } from "react";
 import { useReminders } from "../Contexts/ReminderContext";
 import { formatDate } from "../Utils/calendarUtils";
 import "../Styles/RemindersPanel.css";
 
 const RemindersPanel = () => {
   const {
-    reminders,
-    getUpcomingReminders,
-    deleteReminder,
+    checklistItems,
+    notes,
     permission,
+    addChecklistItem,
+    updateChecklistItem,
+    deleteChecklistItem,
+    toggleChecklistItem,
+    clearCompleted,
+    updateNotes,
+    getStats,
     requestNotificationPermission,
   } = useReminders();
-  const upcomingReminders = getUpcomingReminders();
 
-  const formatReminderTime = (dueTime) => {
-    const date = new Date(dueTime);
+  const [newItemText, setNewItemText] = useState("");
+  const [dueDate, setDueDate] = useState("");
+  const [activeTab, setActiveTab] = useState("checklist");
+  const [editingId, setEditingId] = useState(null);
+  const [editText, setEditText] = useState("");
+
+  const stats = getStats();
+  const pendingItems = checklistItems.filter((item) => !item.completed);
+  const completedItems = checklistItems.filter((item) => item.completed);
+
+  const handleAddItem = (e) => {
+    e.preventDefault();
+    if (!newItemText.trim()) return;
+
+    addChecklistItem(newItemText, dueDate || null);
+    setNewItemText("");
+    setDueDate("");
+  };
+
+  const handleEditStart = (item) => {
+    setEditingId(item.id);
+    setEditText(item.text);
+  };
+
+  const handleEditSave = (id) => {
+    if (editText.trim()) {
+      updateChecklistItem(id, { text: editText.trim() });
+    }
+    setEditingId(null);
+    setEditText("");
+  };
+
+  const handleEditCancel = () => {
+    setEditingId(null);
+    setEditText("");
+  };
+
+  const isOverdue = (dueDate) => {
+    return dueDate && new Date(dueDate) < new Date();
+  };
+
+  const formatDueDate = (dueDate) => {
+    if (!dueDate) return "";
+    const date = new Date(dueDate);
     const now = new Date();
-    const diffMs = date - now;
-    const diffMins = Math.floor(diffMs / 60000);
-    const diffHours = Math.floor(diffMs / 3600000);
-    const diffDays = Math.floor(diffMs / 86400000);
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
 
-    if (diffMins < 60) {
-      return `in ${diffMins} min`;
-    } else if (diffHours < 24) {
-      return `in ${diffHours} hour${diffHours !== 1 ? "s" : ""}`;
+    if (date.toDateString() === today.toDateString()) {
+      return "Today";
+    } else if (date.toDateString() === tomorrow.toDateString()) {
+      return "Tomorrow";
     } else {
-      return `in ${diffDays} day${diffDays !== 1 ? "s" : ""}`;
+      return formatDate(date, "MMM d");
     }
   };
 
-  if (reminders.length === 0) {
-    return (
-      <div className="reminders-panel">
-        <div className="reminders-header">
-          <h3>🔔 Reminders</h3>
-        </div>
-        <div className="empty-reminders">
-          <div className="empty-icon">⏰</div>
-          <p>No reminders set</p>
-          <small>Add reminders to your tasks</small>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="reminders-panel">
-      <div className="reminders-header">
-        <h3>🔔 Reminders</h3>
-        <span className="reminders-count">{upcomingReminders.length}</span>
-      </div>
-
-      {permission !== "granted" && (
-        <div className="permission-banner">
-          <p>Enable notifications for reminders</p>
-          <button
-            className="permission-btn small"
-            onClick={requestNotificationPermission}
-          >
-            Enable
-          </button>
+      <div className="panel-header">
+        <h2>📝 Quick Notes & Reminders</h2>
+        <div className="panel-stats">
+          <span className="stat pending">{stats.pending}</span>
+          <span className="stat completed">{stats.completed}</span>
         </div>
-      )}
-
-      <div className="reminders-list">
-        {upcomingReminders.map((reminder) => (
-          <div key={reminder.id} className="reminder-item">
-            <div className="reminder-content">
-              <div className="reminder-title">{reminder.taskTitle}</div>
-              <div className="reminder-time">
-                {formatDate(new Date(reminder.dueTime), "MMM d, h:mm a")}
-                <span className="reminder-countdown">
-                  ({formatReminderTime(reminder.dueTime)})
-                </span>
-              </div>
-              {reminder.message && (
-                <div className="reminder-message">{reminder.message}</div>
-              )}
-            </div>
-            <button
-              className="delete-reminder-btn"
-              onClick={() => deleteReminder(reminder.id)}
-              title="Delete reminder"
-            >
-              ×
-            </button>
-          </div>
-        ))}
       </div>
 
-      {reminders.filter((r) => r.triggered).length > 0 && (
-        <div className="triggered-reminders">
-          <details>
-            <summary>
-              Completed Reminders ({reminders.filter((r) => r.triggered).length}
-              )
-            </summary>
-            <div className="triggered-list">
-              {reminders
-                .filter((r) => r.triggered)
-                .map((reminder) => (
-                  <div key={reminder.id} className="reminder-item triggered">
-                    <div className="reminder-content">
-                      <div className="reminder-title">{reminder.taskTitle}</div>
-                      <div className="reminder-time">
-                        {formatDate(
-                          new Date(reminder.dueTime),
-                          "MMM d, h:mm a"
-                        )}
+      <div className="panel-tabs">
+        <button
+          className={`tab-btn ${activeTab === "checklist" ? "active" : ""}`}
+          onClick={() => setActiveTab("checklist")}
+        >
+          📋 Checklist
+        </button>
+        <button
+          className={`tab-btn ${activeTab === "notes" ? "active" : ""}`}
+          onClick={() => setActiveTab("notes")}
+        >
+          📄 Notes
+        </button>
+      </div>
+
+      {activeTab === "checklist" && (
+        <div className="checklist-tab">
+          {permission !== "granted" && (
+            <div className="permission-banner">
+              <p>Enable notifications for due reminders</p>
+              <button
+                className="permission-btn"
+                onClick={requestNotificationPermission}
+              >
+                🔔 Enable
+              </button>
+            </div>
+          )}
+
+          {/* Add New Item Form */}
+          <form onSubmit={handleAddItem} className="add-item-form">
+            <div className="input-group">
+              <input
+                type="text"
+                value={newItemText}
+                onChange={(e) => setNewItemText(e.target.value)}
+                placeholder="Add a new reminder..."
+                className="item-input"
+              />
+              <button
+                type="submit"
+                className="add-btn"
+                disabled={!newItemText.trim()}
+              >
+                +
+              </button>
+            </div>
+            <div className="due-date-group">
+              <input
+                type="date"
+                value={dueDate}
+                onChange={(e) => setDueDate(e.target.value)}
+                className="due-date-input"
+                placeholder="Set due date (optional)"
+              />
+            </div>
+          </form>
+
+          {/* Pending Items */}
+          <div className="items-section">
+            <h4 className="section-title">Pending ({pendingItems.length})</h4>
+            {pendingItems.length === 0 ? (
+              <div className="empty-state">
+                <div className="empty-icon">🎯</div>
+                <p>No pending reminders</p>
+                <small>Add reminders above to get started</small>
+              </div>
+            ) : (
+              <div className="items-list">
+                {pendingItems.map((item) => (
+                  <div
+                    key={item.id}
+                    className={`checklist-item ${
+                      isOverdue(item.dueDate) ? "overdue" : ""
+                    }`}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={item.completed}
+                      onChange={() => toggleChecklistItem(item.id)}
+                      className="item-checkbox"
+                    />
+
+                    {editingId === item.id ? (
+                      <div className="edit-form">
+                        <input
+                          type="text"
+                          value={editText}
+                          onChange={(e) => setEditText(e.target.value)}
+                          className="edit-input"
+                          autoFocus
+                        />
+                        <div className="edit-actions">
+                          <button
+                            onClick={() => handleEditSave(item.id)}
+                            className="save-edit-btn"
+                          >
+                            ✓
+                          </button>
+                          <button
+                            onClick={handleEditCancel}
+                            className="cancel-edit-btn"
+                          >
+                            ✗
+                          </button>
+                        </div>
                       </div>
+                    ) : (
+                      <>
+                        <div
+                          className="item-content"
+                          onDoubleClick={() => handleEditStart(item)}
+                        >
+                          <span className="item-text">{item.text}</span>
+                          {item.dueDate && (
+                            <span
+                              className={`due-date ${
+                                isOverdue(item.dueDate) ? "overdue" : ""
+                              }`}
+                            >
+                              📅 {formatDueDate(item.dueDate)}
+                              {isOverdue(item.dueDate) && " ⚠️"}
+                            </span>
+                          )}
+                        </div>
+                        <div className="item-actions">
+                          <button
+                            onClick={() => handleEditStart(item)}
+                            className="edit-btn"
+                            title="Edit"
+                          >
+                            ✏️
+                          </button>
+                          <button
+                            onClick={() => deleteChecklistItem(item.id)}
+                            className="delete-btn"
+                            title="Delete"
+                          >
+                            🗑️
+                          </button>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Completed Items */}
+          {completedItems.length > 0 && (
+            <div className="items-section">
+              <div className="section-header">
+                <h4 className="section-title">
+                  Completed ({completedItems.length})
+                </h4>
+                <button
+                  onClick={clearCompleted}
+                  className="clear-btn"
+                  title="Clear all completed"
+                >
+                  Clear
+                </button>
+              </div>
+              <div className="items-list completed-list">
+                {completedItems.map((item) => (
+                  <div key={item.id} className="checklist-item completed">
+                    <input
+                      type="checkbox"
+                      checked={item.completed}
+                      onChange={() => toggleChecklistItem(item.id)}
+                      className="item-checkbox"
+                    />
+                    <div className="item-content">
+                      <span className="item-text">{item.text}</span>
+                      {item.dueDate && (
+                        <span className="due-date">
+                          📅 {formatDueDate(item.dueDate)}
+                        </span>
+                      )}
                     </div>
                     <button
-                      className="delete-reminder-btn"
-                      onClick={() => deleteReminder(reminder.id)}
-                      title="Delete reminder"
+                      onClick={() => deleteChecklistItem(item.id)}
+                      className="delete-btn"
+                      title="Delete"
                     >
-                      ×
+                      🗑️
                     </button>
                   </div>
                 ))}
+              </div>
             </div>
-          </details>
+          )}
+        </div>
+      )}
+
+      {activeTab === "notes" && (
+        <div className="notes-tab">
+          <div className="notes-header">
+            <h4>Quick Notes</h4>
+            <span className="notes-count">{notes.length} characters</span>
+          </div>
+          <textarea
+            value={notes}
+            onChange={(e) => updateNotes(e.target.value)}
+            placeholder="Write your notes here...&#10;&#10;• Meeting notes&#10;• Ideas&#10;• Shopping list&#10;• Important reminders"
+            className="notes-textarea"
+            rows="12"
+          />
+          <div className="notes-actions">
+            <button onClick={() => updateNotes("")} className="clear-notes-btn">
+              Clear Notes
+            </button>
+            <div className="notes-tips">
+              <small>📝 Auto-saves • 📱 Works on all devices</small>
+            </div>
+          </div>
         </div>
       )}
     </div>

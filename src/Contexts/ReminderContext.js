@@ -11,116 +11,129 @@ export const useReminders = () => {
 };
 
 export const ReminderProvider = ({ children }) => {
-  const [reminders, setReminders] = useState([]);
+  const [checklistItems, setChecklistItems] = useState([]);
+  const [notes, setNotes] = useState("");
   const [permission, setPermission] = useState("default");
 
   useEffect(() => {
-    const savedReminders = localStorage.getItem("calendar-reminders");
-    if (savedReminders) {
-      setReminders(JSON.parse(savedReminders));
+    const savedChecklist = localStorage.getItem("calendar-checklist");
+    const savedNotes = localStorage.getItem("calendar-notes");
+
+    if (savedChecklist) {
+      setChecklistItems(JSON.parse(savedChecklist));
+    }
+    if (savedNotes) {
+      setNotes(savedNotes);
     }
 
+    // Check notification permission
     if ("Notification" in window) {
       setPermission(Notification.permission);
-
-      if (Notification.permission === "default") {
-        Notification.requestPermission().then(setPermission);
-      }
     }
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("calendar-reminders", JSON.stringify(reminders));
-  }, [reminders]);
+    localStorage.setItem("calendar-checklist", JSON.stringify(checklistItems));
+  }, [checklistItems]);
 
+  useEffect(() => {
+    localStorage.setItem("calendar-notes", notes);
+  }, [notes]);
+
+  // Check for due reminders every minute
   useEffect(() => {
     const interval = setInterval(() => {
       checkDueReminders();
-    }, 60000); // Check every minute
+    }, 60000);
 
     return () => clearInterval(interval);
-  }, [reminders]);
+  }, [checklistItems]);
 
   const checkDueReminders = () => {
     const now = new Date();
-    reminders.forEach((reminder) => {
-      if (!reminder.triggered && new Date(reminder.dueTime) <= now) {
-        triggerReminder(reminder);
+    checklistItems.forEach((item) => {
+      if (!item.completed && item.dueDate && new Date(item.dueDate) <= now) {
+        triggerReminder(item);
       }
     });
   };
 
-  const triggerReminder = (reminder) => {
-    setReminders((prev) =>
-      prev.map((r) => (r.id === reminder.id ? { ...r, triggered: true } : r))
+  const triggerReminder = (item) => {
+    // Mark as triggered
+    setChecklistItems((prev) =>
+      prev.map((i) => (i.id === item.id ? { ...i, triggered: true } : i))
     );
 
+    // Show browser notification
     if ("Notification" in window && permission === "granted") {
-      new Notification("🔔 Task Reminder", {
-        body: `${reminder.taskTitle}\n${
-          reminder.message || "Time to complete your task!"
-        }`,
+      new Notification("🔔 Checklist Reminder", {
+        body: `${item.text}\nTime to complete your reminder!`,
         icon: "/favicon.ico",
-        tag: reminder.id,
+        tag: item.id,
         requireInteraction: true,
       });
     }
 
+    // Fallback: Alert if notifications not supported
     if (!("Notification" in window) || permission !== "granted") {
       if (document.hasFocus()) {
-        alert(
-          `🔔 Reminder: ${reminder.taskTitle}\n${
-            reminder.message || "Time to complete your task!"
-          }`
-        );
+        alert(`🔔 Reminder: ${item.text}\nTime to complete your reminder!`);
       }
     }
   };
 
-  const addReminder = (taskId, taskTitle, dueTime, message = "") => {
-    const newReminder = {
+  // Checklist Functions
+  const addChecklistItem = (text, dueDate = null) => {
+    const newItem = {
       id: Date.now().toString(),
-      taskId,
-      taskTitle,
-      dueTime: new Date(dueTime).toISOString(),
-      message,
-      triggered: false,
+      text: text.trim(),
+      completed: false,
+      dueDate: dueDate,
       createdAt: new Date().toISOString(),
+      triggered: false,
     };
 
-    setReminders((prev) => [...prev, newReminder]);
-    return newReminder;
+    setChecklistItems((prev) => [...prev, newItem]);
+    return newItem;
   };
 
-  const updateReminder = (id, updatedReminder) => {
-    setReminders((prev) =>
-      prev.map((reminder) =>
-        reminder.id === id ? { ...reminder, ...updatedReminder } : reminder
+  const updateChecklistItem = (id, updates) => {
+    setChecklistItems((prev) =>
+      prev.map((item) => (item.id === id ? { ...item, ...updates } : item))
+    );
+  };
+
+  const deleteChecklistItem = (id) => {
+    setChecklistItems((prev) => prev.filter((item) => item.id !== id));
+  };
+
+  const toggleChecklistItem = (id) => {
+    setChecklistItems((prev) =>
+      prev.map((item) =>
+        item.id === id ? { ...item, completed: !item.completed } : item
       )
     );
   };
 
-  const deleteReminder = (id) => {
-    setReminders((prev) => prev.filter((reminder) => reminder.id !== id));
+  const clearCompleted = () => {
+    setChecklistItems((prev) => prev.filter((item) => !item.completed));
   };
 
-  const deleteRemindersForTask = (taskId) => {
-    setReminders((prev) =>
-      prev.filter((reminder) => reminder.taskId !== taskId)
-    );
+  // Notes Functions
+  const updateNotes = (newNotes) => {
+    setNotes(newNotes);
   };
 
-  const getRemindersForTask = (taskId) => {
-    return reminders.filter((reminder) => reminder.taskId === taskId);
-  };
+  const getStats = () => {
+    const total = checklistItems.length;
+    const completed = checklistItems.filter((item) => item.completed).length;
+    const pending = total - completed;
+    const overdue = checklistItems.filter(
+      (item) =>
+        !item.completed && item.dueDate && new Date(item.dueDate) < new Date()
+    ).length;
 
-  const getUpcomingReminders = () => {
-    const now = new Date();
-    return reminders
-      .filter(
-        (reminder) => !reminder.triggered && new Date(reminder.dueTime) > now
-      )
-      .sort((a, b) => new Date(a.dueTime) - new Date(b.dueTime));
+    return { total, completed, pending, overdue };
   };
 
   const requestNotificationPermission = () => {
@@ -130,14 +143,23 @@ export const ReminderProvider = ({ children }) => {
   };
 
   const value = {
-    reminders,
+    // Checklist
+    checklistItems,
+    notes,
     permission,
-    addReminder,
-    updateReminder,
-    deleteReminder,
-    deleteRemindersForTask,
-    getRemindersForTask,
-    getUpcomingReminders,
+
+    // Checklist Actions
+    addChecklistItem,
+    updateChecklistItem,
+    deleteChecklistItem,
+    toggleChecklistItem,
+    clearCompleted,
+
+    // Notes Actions
+    updateNotes,
+
+    // Stats & Utils
+    getStats,
     requestNotificationPermission,
   };
 

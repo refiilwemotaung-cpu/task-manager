@@ -6,7 +6,7 @@
   margin-bottom: 2rem;
 }
 
-.reminders-header {
+.panel-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -15,30 +15,79 @@
   border-bottom: 1px solid var(--border-color);
 }
 
-.reminders-header h3 {
+.panel-header h2 {
   margin: 0;
   color: var(--text-color);
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   font-weight: 600;
 }
 
-.reminders-count {
-  background: var(--primary-color);
-  color: white;
-  padding: 0.25rem 0.75rem;
-  border-radius: 12px;
+.panel-stats {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.stat {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 0.8rem;
   font-weight: 600;
-  min-width: 20px;
-  text-align: center;
+}
+
+.stat.pending {
+  background: var(--warning-color);
+  color: white;
+}
+
+.stat.completed {
+  background: var(--success-color);
+  color: white;
+}
+
+.panel-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: var(--surface-color);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.tab-btn {
+  background: transparent;
+  border: none;
+  padding: 1rem;
+  cursor: pointer;
+  font-weight: 500;
+  color: var(--text-secondary);
+  transition: all 0.3s ease;
+  border-bottom: 3px solid transparent;
+}
+
+.tab-btn.active {
+  color: var(--primary-color);
+  border-bottom-color: var(--primary-color);
+  background: var(--background-color);
+}
+
+.tab-btn:hover:not(.active) {
+  color: var(--text-color);
+  background: var(--background-color);
+}
+
+/* Checklist Tab */
+.checklist-tab {
+  padding: 1.5rem;
 }
 
 .permission-banner {
   background: rgba(245, 158, 11, 0.1);
   border: 1px solid var(--warning-color);
   border-radius: 8px;
-  margin: 1rem;
   padding: 1rem;
+  margin-bottom: 1.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -52,7 +101,7 @@
   flex: 1;
 }
 
-.permission-btn.small {
+.permission-btn {
   background: var(--warning-color);
   color: white;
   border: none;
@@ -64,188 +113,443 @@
   white-space: nowrap;
 }
 
-.permission-btn.small:hover {
+.permission-btn:hover {
   background: #d97706;
 }
 
-.empty-reminders {
-  text-align: center;
-  padding: 3rem 2rem;
+.add-item-form {
+  margin-bottom: 2rem;
+  background: var(--surface-color);
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+}
+
+.input-group {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.item-input {
+  flex: 1;
+  padding: 0.75rem;
+  border: 2px solid var(--border-color);
+  border-radius: 6px;
+  background: var(--background-color);
+  color: var(--text-color);
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.item-input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.add-btn {
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  width: 44px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.add-btn:hover:not(:disabled) {
+  background: var(--secondary-color);
+  transform: scale(1.05);
+}
+
+.add-btn:disabled {
+  background: var(--border-color);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.due-date-group {
+  display: flex;
+}
+
+.due-date-input {
+  flex: 1;
+  padding: 0.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  background: var(--background-color);
+  color: var(--text-color);
+  font-size: 0.9rem;
+}
+
+.items-section {
+  margin-bottom: 2rem;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.section-title {
+  margin: 0;
+  color: var(--text-color);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.clear-btn {
+  background: var(--surface-color);
   color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  padding: 0.375rem 0.75rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: all 0.3s ease;
+}
+
+.clear-btn:hover {
+  background: var(--error-color);
+  color: white;
+  border-color: var(--error-color);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 2rem 1rem;
+  color: var(--text-secondary);
+  background: var(--surface-color);
+  border-radius: 8px;
+  border: 2px dashed var(--border-color);
 }
 
 .empty-icon {
-  font-size: 3rem;
-  margin-bottom: 1rem;
-  opacity: 0.5;
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  opacity: 0.7;
 }
 
-.empty-reminders p {
-  margin: 0 0 0.5rem 0;
+.empty-state p {
+  margin: 0 0 0.25rem 0;
   font-weight: 500;
 }
 
-.empty-reminders small {
+.empty-state small {
   font-size: 0.8rem;
   opacity: 0.8;
 }
 
-.reminders-list {
-  max-height: 300px;
-  overflow-y: auto;
-}
-
-.reminder-item {
+.items-list {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  padding: 1rem 1.5rem;
-  border-bottom: 1px solid var(--border-color);
-  transition: all 0.3s ease;
-}
-
-.reminder-item:hover {
-  background: var(--surface-color);
-}
-
-.reminder-item.triggered {
-  opacity: 0.6;
-}
-
-.reminder-item.triggered .reminder-title {
-  text-decoration: line-through;
-}
-
-.reminder-content {
-  flex: 1;
-  min-width: 0;
-}
-
-.reminder-title {
-  font-weight: 600;
-  color: var(--text-color);
-  margin-bottom: 0.5rem;
-  word-break: break-word;
-}
-
-.reminder-time {
-  font-size: 0.8rem;
-  color: var(--text-secondary);
-  margin-bottom: 0.5rem;
-}
-
-.reminder-countdown {
-  color: var(--primary-color);
-  font-weight: 600;
-  margin-left: 0.5rem;
-}
-
-.reminder-message {
-  font-size: 0.9rem;
-  color: var(--text-secondary);
-  font-style: italic;
-  word-break: break-word;
-}
-
-.delete-reminder-btn {
-  background: none;
-  border: none;
-  color: var(--text-secondary);
-  cursor: pointer;
-  font-size: 1.2rem;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-  flex-shrink: 0;
-  margin-left: 0.5rem;
-}
-
-.delete-reminder-btn:hover {
-  background: var(--error-color);
-  color: white;
-}
-
-.triggered-reminders {
-  border-top: 1px solid var(--border-color);
-}
-
-.triggered-reminders details {
-  padding: 1rem 1.5rem;
-}
-
-.triggered-reminders summary {
-  cursor: pointer;
-  font-weight: 600;
-  color: var(--text-secondary);
-  list-style: none;
-  display: flex;
-  align-items: center;
+  flex-direction: column;
   gap: 0.5rem;
 }
 
-.triggered-reminders summary::-webkit-details-marker {
-  display: none;
+.completed-list {
+  opacity: 0.7;
 }
 
-.triggered-reminders summary::before {
-  content: "▶";
+.checklist-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  background: var(--surface-color);
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  transition: all 0.3s ease;
+}
+
+.checklist-item:hover {
+  border-color: var(--primary-color);
+  box-shadow: var(--shadow);
+}
+
+.checklist-item.overdue {
+  border-left: 4px solid var(--error-color);
+  background: rgba(239, 68, 68, 0.05);
+}
+
+.checklist-item.completed {
+  opacity: 0.6;
+}
+
+.checklist-item.completed .item-text {
+  text-decoration: line-through;
+}
+
+.item-checkbox {
+  margin-top: 0.25rem;
+  accent-color: var(--primary-color);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.item-content {
+  flex: 1;
+  min-width: 0;
+  cursor: pointer;
+}
+
+.item-text {
+  display: block;
+  color: var(--text-color);
+  font-size: 0.95rem;
+  line-height: 1.4;
+  word-break: break-word;
+  margin-bottom: 0.25rem;
+}
+
+.due-date {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.due-date.overdue {
+  color: var(--error-color);
+  font-weight: 600;
+}
+
+.item-actions {
+  display: flex;
+  gap: 0.25rem;
+  flex-shrink: 0;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.checklist-item:hover .item-actions {
+  opacity: 1;
+}
+
+.edit-btn,
+.delete-btn {
+  background: none;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.7rem;
+  transition: all 0.3s ease;
+}
+
+.edit-btn:hover {
+  border-color: var(--primary-color);
+  background: rgba(37, 99, 235, 0.1);
+}
+
+.delete-btn:hover {
+  border-color: var(--error-color);
+  background: rgba(239, 68, 68, 0.1);
+}
+
+/* Edit Form */
+.edit-form {
+  display: flex;
+  gap: 0.5rem;
+  flex: 1;
+  align-items: flex-start;
+}
+
+.edit-input {
+  flex: 1;
+  padding: 0.5rem;
+  border: 2px solid var(--primary-color);
+  border-radius: 4px;
+  background: var(--background-color);
+  color: var(--text-color);
+  font-size: 0.95rem;
+}
+
+.edit-actions {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.save-edit-btn,
+.cancel-edit-btn {
+  background: none;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
   font-size: 0.8rem;
-  transition: transform 0.3s ease;
 }
 
-.triggered-reminders details[open] summary::before {
-  transform: rotate(90deg);
+.save-edit-btn {
+  color: var(--success-color);
 }
 
-.triggered-list {
+.save-edit-btn:hover {
+  background: var(--success-color);
+  color: white;
+  border-color: var(--success-color);
+}
+
+.cancel-edit-btn {
+  color: var(--error-color);
+}
+
+.cancel-edit-btn:hover {
+  background: var(--error-color);
+  color: white;
+  border-color: var(--error-color);
+}
+
+/* Notes Tab */
+.notes-tab {
+  padding: 1.5rem;
+}
+
+.notes-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.notes-header h4 {
+  margin: 0;
+  color: var(--text-color);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.notes-count {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  background: var(--surface-color);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+}
+
+.notes-textarea {
+  width: 100%;
+  padding: 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--background-color);
+  color: var(--text-color);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  resize: vertical;
+  min-height: 200px;
+  font-family: inherit;
+  transition: all 0.3s ease;
+}
+
+.notes-textarea:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.notes-textarea::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.7;
+}
+
+.notes-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-top: 1rem;
-  border-top: 1px solid var(--border-color);
   padding-top: 1rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.clear-notes-btn {
+  background: var(--surface-color);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: all 0.3s ease;
+}
+
+.clear-notes-btn:hover {
+  background: var(--error-color);
+  color: white;
+  border-color: var(--error-color);
+}
+
+.notes-tips {
+  color: var(--text-secondary);
+  font-size: 0.7rem;
 }
 
 /* Smart Watch */
 @media (max-width: 240px) {
-  .reminders-header {
+  .panel-header {
     padding: 1rem;
-  }
-
-  .reminders-header h3 {
-    font-size: 1rem;
-  }
-
-  .reminders-count {
-    padding: 0.125rem 0.5rem;
-    font-size: 0.7rem;
-  }
-
-  .permission-banner {
-    margin: 0.5rem;
-    padding: 0.75rem;
     flex-direction: column;
     gap: 0.5rem;
     text-align: center;
   }
 
-  .reminder-item {
-    padding: 0.75rem 1rem;
+  .panel-header h2 {
+    font-size: 1.1rem;
+  }
+
+  .checklist-tab,
+  .notes-tab {
+    padding: 1rem;
+  }
+
+  .add-item-form {
+    padding: 0.75rem;
+  }
+
+  .input-group {
     flex-direction: column;
+  }
+
+  .add-btn {
+    width: 100%;
+    height: 36px;
+  }
+
+  .checklist-item {
+    padding: 0.5rem;
     gap: 0.5rem;
   }
 
-  .delete-reminder-btn {
-    align-self: flex-end;
+  .item-actions {
+    opacity: 1; /* Always show on small screens */
   }
 
-  .empty-reminders {
-    padding: 2rem 1rem;
+  .edit-form {
+    flex-direction: column;
   }
 
-  .empty-icon {
-    font-size: 2rem;
+  .notes-textarea {
+    padding: 0.75rem;
+    font-size: 0.9rem;
+  }
+
+  .notes-actions {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: stretch;
   }
 }
 
@@ -255,11 +559,16 @@
     margin-bottom: 1.5rem;
   }
 
-  .reminders-header {
+  .panel-header {
     padding: 1.25rem;
   }
 
-  .reminder-item {
-    padding: 1rem 1.25rem;
+  .checklist-tab,
+  .notes-tab {
+    padding: 1.25rem;
+  }
+
+  .item-actions {
+    opacity: 1; /* Always show on mobile */
   }
 }
