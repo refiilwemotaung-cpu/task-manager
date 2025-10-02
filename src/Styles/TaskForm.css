@@ -70,17 +70,17 @@
 
 .quick-btn.high {
   border-color: var(--error-color);
-  background: rgba(239, 68, 68, 0.1);
+  background: rgba(191, 130, 15, 0.1);
 }
 
 .quick-btn.medium {
   border-color: var(--warning-color);
-  background: rgba(245, 158, 11, 0.1);
+  background: rgba(242, 187, 22, 0.1);
 }
 
 .quick-btn.low {
-  border-color: var(--success-color);
-  background: rgba(16, 185, 129, 0.1);
+  border-color: var(--primary-color);
+  background: rgba(17, 140, 140, 0.1);
 }
 
 .task-form {
@@ -131,7 +131,7 @@
 .form-select:focus {
   outline: none;
   border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  box-shadow: 0 0 0 3px rgba(17, 140, 140, 0.1);
 }
 
 .form-textarea {
@@ -170,7 +170,7 @@
 .submit-btn:hover {
   background: var(--secondary-color);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+  box-shadow: 0 4px 12px rgba(17, 140, 140, 0.3);
 }
 
 .cancel-btn {

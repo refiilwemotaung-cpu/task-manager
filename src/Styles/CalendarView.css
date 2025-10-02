@@ -79,6 +79,18 @@
   overflow: auto;
 }
 
+.month-header {
+  background: var(--primary-color);
+  color: white;
+  font-weight: 600;
+  text-align: center;
+}
+
+.week-day-header.today {
+  background: var(--primary-color);
+  color: white;
+}
+
 /* Smart Watch */
 @media (max-width: 240px) {
   .calendar-header {

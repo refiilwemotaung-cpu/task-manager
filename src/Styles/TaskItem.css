@@ -34,15 +34,83 @@
 }
 
 .task-item.high {
-  border-left: 4px solid var(--error-color);
+  border-left-color: var(--error-color);
 }
 
 .task-item.medium {
-  border-left: 4px solid var(--warning-color);
+  border-left-color: var(--warning-color);
 }
 
 .task-item.low {
-  border-left: 4px solid var(--success-color);
+  border-left-color: var(--success-color);
+}
+
+.task-badge.high {
+  border-left-color: var(--error-color);
+}
+
+.task-badge.medium {
+  border-left-color: var(--warning-color);
+}
+
+.task-badge.low {
+  border-left-color: var(--success-color);
+}
+
+/* Add these new priority styles with your color palette: */
+.task-item.high {
+  border-left-color: #bf820f; /* Dark gold */
+  background: rgba(191, 130, 15, 0.05);
+}
+
+.task-item.medium {
+  border-left-color: #f2bb16; /* Golden yellow */
+  background: rgba(242, 187, 22, 0.05);
+}
+
+.task-item.low {
+  border-left-color: #118c8c; /* Teal */
+  background: rgba(17, 140, 140, 0.05);
+}
+
+.task-badge.high {
+  border-left-color: #bf820f;
+}
+
+.task-badge.high .task-badge-dot {
+  background: #bf820f;
+}
+
+.task-badge.medium {
+  border-left-color: #f2bb16;
+}
+
+.task-badge.medium .task-badge-dot {
+  background: #f2bb16;
+}
+
+.task-badge.low {
+  border-left-color: #118c8c;
+}
+
+.task-badge.low .task-badge-dot {
+  background: #118c8c;
+}
+
+/* Update week view task colors */
+.week-task-item.high {
+  border-left-color: #bf820f;
+  background: rgba(191, 130, 15, 0.1);
+}
+
+.week-task-item.medium {
+  border-left-color: #f2bb16;
+  background: rgba(242, 187, 22, 0.1);
+}
+
+.week-task-item.low {
+  border-left-color: #118c8c;
+  background: rgba(17, 140, 140, 0.1);
 }
 
 .task-header {
@@ -156,6 +224,18 @@
   padding: 0.75rem;
   transition: all 0.3s ease;
   cursor: grab;
+}
+
+.task-item-compact.high .compact-priority {
+  background: #bf820f;
+}
+
+.task-item-compact.medium .compact-priority {
+  background: #f2bb16;
+}
+
+.task-item-compact.low .compact-priority {
+  background: #118c8c;
 }
 
 .task-item-compact:hover {
