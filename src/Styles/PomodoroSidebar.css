@@ -1,0 +1,224 @@
+.pomodoro-sidebar {
+  background: var(--card-color);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  margin-bottom: 2rem;
+  border-left: 6px solid;
+  padding: 1.5rem;
+}
+
+.pomodoro-sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.pomodoro-sidebar-header h3 {
+  margin: 0;
+  color: var(--text-color);
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.session-badge {
+  color: white;
+  padding: 0.375rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.timer-display-sidebar {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.time-main-sidebar {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--text-color);
+  line-height: 1;
+  margin-bottom: 1rem;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background: var(--surface-color);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  transition: width 1s linear;
+  border-radius: 4px;
+}
+
+.timer-controls-sidebar {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.control-btn {
+  padding: 0.75rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+}
+
+.start-btn {
+  background: var(--success-color);
+  color: white;
+  grid-column: 1 / -1;
+}
+
+.start-btn:hover {
+  background: #10a571;
+  transform: translateY(-2px);
+}
+
+.pause-btn {
+  background: var(--warning-color);
+  color: white;
+  grid-column: 1 / -1;
+}
+
+.pause-btn:hover {
+  background: #d97706;
+  transform: translateY(-2px);
+}
+
+.reset-btn {
+  background: var(--surface-color);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+}
+
+.reset-btn:hover {
+  background: var(--border-color);
+  transform: translateY(-2px);
+}
+
+.session-selector-sidebar {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.session-btn {
+  padding: 0.75rem 0.5rem;
+  border: 1px solid var(--border-color);
+  background: var(--surface-color);
+  color: var(--text-color);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.session-btn.active {
+  background: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
+}
+
+.session-btn:hover:not(.active) {
+  background: var(--border-color);
+}
+
+.pomodoro-stats-sidebar {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.stat {
+  text-align: center;
+  padding: 1rem 0.5rem;
+  background: var(--surface-color);
+  border-radius: 8px;
+}
+
+.stat-value {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin-bottom: 0.25rem;
+}
+
+.stat-label {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Smart Watch */
+@media (max-width: 240px) {
+  .pomodoro-sidebar {
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .pomodoro-sidebar-header {
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+
+  .pomodoro-sidebar-header h3 {
+    font-size: 1rem;
+  }
+
+  .session-badge {
+    font-size: 0.7rem;
+    padding: 0.25rem 0.5rem;
+  }
+
+  .time-main-sidebar {
+    font-size: 2rem;
+  }
+
+  .timer-controls-sidebar {
+    grid-template-columns: 1fr;
+  }
+
+  .session-selector-sidebar {
+    grid-template-columns: 1fr;
+  }
+
+  .pomodoro-stats-sidebar {
+    grid-template-columns: 1fr;
+  }
+
+  .stat {
+    padding: 0.75rem 0.25rem;
+  }
+
+  .stat-value {
+    font-size: 1.2rem;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .pomodoro-sidebar {
+    margin-bottom: 1.5rem;
+  }
+}

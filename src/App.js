@@ -7,7 +7,7 @@ import Header from "./Components/Header";
 import CalendarView from "./Components/Calendar/CalendarView";
 import TaskForm from "./Components/TaskForm";
 import TaskList from "./Components/TaskList";
-import PomodoroTimer from "./Components/PomodoroTimer";
+import PomodoroSidebar from "./Components/PomodoroSidebar";
 import RemindersPanel from "./Components/RemindersPanel";
 import "./Styles/App.css";
 
@@ -24,7 +24,7 @@ function AppContent() {
           <div className="app-layout">
             {/* Left Sidebar - All Features */}
             <div className="sidebar">
-              <PomodoroTimer />
+              <PomodoroSidebar />
               <RemindersPanel />
               {/* Only show TaskForm when NOT in Day view (since Day view has inline adding) */}
               {!isDayView && <TaskForm />}
